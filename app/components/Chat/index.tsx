@@ -1,9 +1,10 @@
 'use client';
-import { Alert, Box, Button, Snackbar, Typography } from "@mui/material";
+import { Alert, Box, Button, Snackbar } from "@mui/material";
 import Textarea from '@mui/joy/Textarea';
 // import { useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { useEffect, useRef } from "react";
+import ChatMessage from "../ChatMessage";
 
 const Chat = () => {
     // const [inputValue, setInputValue] = useState('');
@@ -31,46 +32,20 @@ const Chat = () => {
     <Box className="flex flex-col p-4 h-[100%]">
       <h1 className="text-2xl font-bold mb-4 text-center">Chat Component</h1>
       <Box className="flex-1 overflow-y-auto max-h-[65vh]">
-        <Box className="text-left bg-gray-100 max-w-[640px] ml-auto mr-auto mt-2 mb-4 rounded-lg">
-            <Box className="flex p-[12px] pl-[24px] pr-[24px] ">
-                <Box className="flex flex-col items-center">
-                    {/* <Typography className="pb-2" variant="body2">Refugee GPT</Typography> */}
-                    <Box className="bg-black rounded-[50%] w-[40px] h-[40px]">
-                        <img
-                            src="/globe.svg"
-                            alt="Logo"
-                            className="h-10 w-10"
-                        />
-                    </Box>
-                </Box>
-
-                <Box className="pl-[40px] pr-[40px]">
-                    Hello, how can I help you today?
-                </Box>
-            </Box>
-        </Box>
+        <ChatMessage
+          message={{ content: 'Hello, how can I help you today?', role: 'AI' }}
+        />
         {messages.map((m, index) => {
             const isLast = index === messages.length - 1;
             return (
-                <Box key={index} ref={isLast ? lastMessageRef : null} className="text-left bg-gray-100 max-w-[640px] ml-auto mr-auto mt-2 mb-4 rounded-lg">
-                <Box className="flex p-[12px] pl-[24px] pr-[24px] ">
-                    <Box className="flex flex-col items-center">
-                        <Typography className="pb-2" variant="body2">{m.role === 'user' ? 'Me' : 'AI'}</Typography>
-                        <Box className="bg-black rounded-[50%] w-[40px] h-[40px]">
-                            <img
-                                src="/globe.svg"
-                                alt="Logo"
-                                className="h-10 w-10"
-                            />
-                        </Box>
-                    </Box>
-
-                    <Box className="pl-[40px] pr-[40px]">
-                        {m.content}
-                    </Box>
-                </Box>
-            </Box>
-                );
+              <ChatMessage
+                  key={index}
+                  index={index}
+                  message={m}
+                  isLast={isLast}
+                  lastMessageRef={lastMessageRef as React.RefObject<HTMLDivElement>}
+              />
+            );
             })}
       </Box>
       <Box
